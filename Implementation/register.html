@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Register or get in touch with our lab studio. Complete the interactive form below.">
+    <title>Studio - Register / Contact</title>
+    <link rel="stylesheet" href="css/Stylesheet.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="index.html">Studio</a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="components.html">Components</a></li>
+          <li><a class="active" href="register.html">Register</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="section">
+        <h1>Get in Touch / Register</h1>
+        <p class="label">Fill out the form below using our styled form components and accessibility best practices.</p>
+      </section>
+
+      <!-- Alert Example -->
+      <div class="alert alert-info" role="status">
+        Please fill out all required fields marked with <span class="required">*</span>.
+      </div>
+
+      <!-- Form Component Container -->
+      <div class="form-container">
+        <form action="#" method="POST">
+          
+          <div class="form-group">
+            <label for="fullname">Full Name <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="fullname" name="fullname" required placeholder="e.g., salma hossam">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address <span class="required" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" required placeholder="salma@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="role-select">Select Your Role</label>
+            <select id="role-select" name="role">
+              <option value="engineer">Engineer</option>
+              <option value="maintainer">Maintainer</option>
+              <option value="researcher">Researcher</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <fieldset>
+            <legend>Preferred Notification Method</legend>
+            <div class="choice-group">
+              <label class="choice-label">
+                <input type="radio" name="notification" value="email" checked> Email
+              </label>
+              <label class="choice-label">
+                <input type="radio" name="notification" value="sms"> SMS
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="submit-btn">Submit Application</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 48px">
+      <div class="container">In-Lab Practice (Studio) - Registration</div>
+    </footer>
+  </body>
+</html>

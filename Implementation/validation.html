@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="User Registration Form with Real-time JavaScript Validation">
+    <title>Studio - Registration Validation</title>
+    <link rel="stylesheet" href="css/Stylesheet.css">
+    <style>
+      .error-message {
+        color: #dc2626;
+        font-size: 0.85rem;
+        margin-top: 4px;
+        display: none;
+      }
+      .input-error {
+        border-color: #dc2626 !important;
+      }
+      .input-success {
+        border-color: #16a34a !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="index.html">Studio</a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="components.html">Components</a></li>
+          <li><a href="register.html">Register</a></li>
+          <li><a class="active" href="validation.html">Validation</a></li>
+          <li><a href="data.html">Data Table</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="section">
+        <h1>Registration Form</h1>
+        <p class="label">Please fill in the form below. Real-time validation will check your entries.</p>
+      </section>
+
+      <div class="form-container">
+        <form id="registrationForm" novalidate>
+          
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="name">Full Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" placeholder="John Doe">
+            <div class="error-message" id="nameError">Name is required (at least 3 characters).</div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="example@domain.com">
+            <div class="error-message" id="emailError">Please enter a valid email address.</div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password">Password <span class="required">*</span></label>
+            <input type="password" id="password" name="password" placeholder="••••••••">
+            <div class="error-message" id="passwordError">Password must be at least 8 characters long.</div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••">
+            <div class="error-message" id="confirmPasswordError">Passwords do not match.</div>
+          </div>
+
+          <!-- Age Field -->
+          <div class="form-group">
+            <label for="age">Age <span class="required">*</span></label>
+            <input type="number" id="age" name="age" placeholder="25">
+            <div class="error-message" id="ageError">Please enter a valid age between 18 and 100.</div>
+          </div>
+
+          <button type="submit" class="submit-btn" style="margin-top: 12px;">Register</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 48px">
+      <div class="container">In-Lab Practice (Studio) - Validation</div>
+    </footer>
+
+    <script>
+      const form = document.getElementById('registrationForm');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const ageInput = document.getElementById('age');
+
+      function showError(input, errorEl, message) {
+        input.classList.add('input-error');
+        input.classList.remove('input-success');
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+
+      function showSuccess(input, errorEl) {
+        input.classList.remove('input-error');
+        input.classList.add('input-success');
+        errorEl.style.display = 'none';
+      }
+
+      function validateName() {
+        const val = nameInput.value.trim();
+        if (val === '' || val.length < 3) {
+          showError(nameInput, document.getElementById('nameError'), 'Name must be at least 3 characters.');
+          return false;
+        }
+        showSuccess(nameInput, document.getElementById('nameError'));
+        return true;
+      }
+
+      function validateEmail() {
+        const val = emailInput.value.trim();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(val)) {
+          showError(emailInput, document.getElementById('emailError'), 'Please enter a valid email address.');
+          return false;
+        }
+        showSuccess(emailInput, document.getElementById('emailError'));
+        return true;
+      }
+
+      function validatePassword() {
+        const val = passwordInput.value;
+        if (val.length < 8) {
+          showError(passwordInput, document.getElementById('passwordError'), 'Password must be at least 8 characters.');
+          return false;
+        }
+        showSuccess(passwordInput, document.getElementById('passwordError'));
+        return true;
+      }
+
+      function validateConfirmPassword() {
+        const val = confirmPasswordInput.value;
+        if (val === '' || val !== passwordInput.value) {
+          showError(confirmPasswordInput, document.getElementById('confirmPasswordError'), 'Passwords do not match.');
+          return false;
+        }
+        showSuccess(confirmPasswordInput, document.getElementById('confirmPasswordError'));
+        return true;
+      }
+
+      function validateAge() {
+        const val = parseInt(ageInput.value, 10);
+        if (isNaN(val) || val < 18 || val > 100) {
+          showError(ageInput, document.getElementById('ageError'), 'Age must be between 18 and 100.');
+          return false;
+        }
+        showSuccess(ageInput, document.getElementById('ageError'));
+        return true;
+      }
+
+      // Input event listeners for immediate feedback
+      nameInput.addEventListener('input', validateName);
+      emailInput.addEventListener('input', validateEmail);
+      passwordInput.addEventListener('input', validatePassword);
+      confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+      ageInput.addEventListener('input', validateAge);
+
+      // Prevent form submission on invalid inputs
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+        const isConfirmValid = validateConfirmPassword();
+        const isAgeValid = validateAge();
+
+        if (isNameValid && isEmailValid && isPasswordValid && isConfirmValid && isAgeValid) {
+          alert('Registration successful!');
+          form.reset();
+          [nameInput, emailInput, passwordInput, confirmPasswordInput, ageInput].forEach(i => i.classList.remove('input-success'));
+        }
+      });
+    </script>
+  </body>
+</html>

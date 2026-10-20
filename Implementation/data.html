@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive Data Table with Search and Sorting Capabilities">
+    <title>Studio - Dynamic Data Table</title>
+    <link rel="stylesheet" href="css/Stylesheet.css">
+    <style>
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .search-box {
+        max-width: 320px;
+      }
+      .sort-buttons {
+        display: flex;
+        gap: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="index.html">Studio</a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="components.html">Components</a></li>
+          <li><a href="register.html">Register</a></li>
+          <li><a href="validation.html">Validation</a></li>
+          <li><a class="active" href="data.html">Data Table</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="section">
+        <h1>User Directory</h1>
+        <p class="label">Filter records instantly as you type, or sort by column values.</p>
+      </section>
+
+      <!-- Controls: Search & Sort -->
+      <div class="controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name, role, or city...">
+        </div>
+        <div class="sort-buttons">
+          <button class="btn btn-outline" id="sortNameBtn">Sort by Name ↕</button>
+          <button class="btn btn-outline" id="sortAgeBtn">Sort by Age ↕</button>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Table rows dynamically generated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 48px">
+      <div class="container">In-Lab Practice (Studio) - Data Directory</div>
+    </footer>
+
+    <script>
+      // Initial Array of Objects
+      const usersData = [
+        { id: 1, name: "Ada Lovelace", age: 36, city: "London", role: "Engineer" },
+        { id: 2, name: "Linus Torvalds", age: 54, city: "Helsinki", role: "Maintainer" },
+        { id: 3, name: "Grace Hopper", age: 85, city: "New York", role: "Admiral" },
+        { id: 4, name: "Alan Turing", age: 41, city: "London", role: "Researcher" },
+        { id: 5, name: "Salma Hossam", age: 24, city: "Cairo", role: "Developer" },
+        { id: 6, name: "Omar Mahmoud", age: 29, city: "Giza", role: "Designer" }
+      ];
+
+      let currentData = [...usersData];
+      let sortDirection = { name: 'asc', age: 'asc' };
+
+      const tableBody = document.getElementById('tableBody');
+      const searchInput = document.getElementById('searchInput');
+      const sortNameBtn = document.getElementById('sortNameBtn');
+      const sortAgeBtn = document.getElementById('sortAgeBtn');
+
+      // Function to render table rows
+      function renderTable(data) {
+        tableBody.innerHTML = '';
+        if (data.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--muted);">No matching results found.</td></tr>`;
+          return;
+        }
+
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>#${item.id}</td>
+            <td><strong>${item.name}</strong></td>
+            <td>${item.age}</td>
+            <td>${item.city}</td>
+            <td><span class="badge">${item.role}</span></td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      }
+
+      // Live search filter
+      searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        currentData = usersData.filter(user => 
+          user.name.toLowerCase().includes(query) ||
+          user.city.toLowerCase().includes(query) ||
+          user.role.toLowerCase().includes(query)
+        );
+        renderTable(currentData);
+      });
+
+      // Sort by Name
+      sortNameBtn.addEventListener('click', function() {
+        const isAsc = sortDirection.name === 'asc';
+        currentData.sort((a, b) => isAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+        sortDirection.name = isAsc ? 'desc' : 'asc';
+        sortNameBtn.textContent = `Sort by Name ${isAsc ? '↑' : '↓'}`;
+        renderTable(currentData);
+      });
+
+      // Sort by Age
+      sortAgeBtn.addEventListener('click', function() {
+        const isAsc = sortDirection.age === 'asc';
+        currentData.sort((a, b) => isAsc ? a.age - b.age : b.age - a.age);
+        sortDirection.age = isAsc ? 'desc' : 'asc';
+        sortAgeBtn.textContent = `Sort by Age ${isAsc ? '↑' : '↓'}`;
+        renderTable(currentData);
+      });
+
+      // Initial Render
+      renderTable(currentData);
+    </script>
+  </body>
+</html>
